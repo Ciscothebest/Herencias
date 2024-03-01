@@ -1,0 +1,38 @@
+using System;
+
+class Vehicle
+{
+    public string Brand { get; set; }
+
+    public Vehicle(string brand)
+    {
+        Brand = brand;
+    }
+
+    public void Drive()
+    {
+        Console.WriteLine("Driving the {0}.", Brand);
+    }
+}
+
+class Car : Vehicle
+{
+    public Car(string brand) : base(brand)
+    {
+    }
+
+    public void Accelerate()
+    {
+        Console.WriteLine("The car is accelerating.");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Car car = new Car("Toyota");
+        car.Drive(); // inherited method
+        car.Accelerate(); // specialized method
+    }
+}
