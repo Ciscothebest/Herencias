@@ -1,0 +1,109 @@
+using System;
+
+class Autobus
+{
+    public string Ruta { get; }
+    public int CapacidadAsientos { get; }
+    public decimal PrecioBoleto { get; }
+    private int AsientosDisponibles;
+    private decimal Ganancias;
+    private int PasajerosAgregados;
+
+    public Autobus(string ruta, int capacidad, decimal precio)
+    {
+        Ruta = ruta;
+        CapacidadAsientos = capacidad;
+        PrecioBoleto = precio;
+        AsientosDisponibles = capacidad;
+        Ganancias = 0;
+        PasajerosAgregados = 0;
+    }
+
+    public void VenderPasaje(int cantidadPasajeros)
+    {
+        if (cantidadPasajeros > 0 && cantidadPasajeros <= AsientosDisponibles)
+        {
+            AsientosDisponibles -= cantidadPasajeros;
+            decimal ventas = cantidadPasajeros * PrecioBoleto;
+            Ganancias += ventas;
+            Console.WriteLine($"Venta realizada en la ruta {Ruta}: {cantidadPasajeros} Pasajeros, Ventas {ventas}");
+        }
+        else
+        {
+            Console.WriteLine($"No se pueden vender {cantidadPasajeros} pasajes en la ruta {Ruta}. Asientos disponibles: {AsientosDisponibles}");
+        }
+    }
+
+    public void AgregarPasajeros(int cantidadPasajeros)
+    {
+        if (cantidadPasajeros > 0 && AsientosDisponibles + PasajerosAgregados + cantidadPasajeros <= CapacidadAsientos)
+        {
+            PasajerosAgregados += cantidadPasajeros;
+            Console.WriteLine($"Se agregaron {cantidadPasajeros} pasajeros a la ruta {Ruta}");
+        }
+        else
+        {
+            Console.WriteLine($"No se pueden agregar {cantidadPasajeros} pasajeros a la ruta {Ruta}. Asientos disponibles: {AsientosDisponibles}");
+        }
+    }
+
+    public decimal CalcularGanancias(int numVueltas)
+    {
+        return Ganancias * numVueltas;
+    }
+
+    public decimal CalcularPrecioAsiento()
+    {
+        return PrecioBoleto;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        // Solicitar al usuario la cantidad de pasajeros por ruta
+        Console.WriteLine("Ingrese la cantidad de pasajeros para el Expreso 27 de Febrero:");
+        int pasajerosExpreso = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Ingrese la cantidad de pasajeros para la OMSA Megacentro - Villa Agricola:");
+        int pasajerosOmsa = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Ingrese la cantidad de pasajeros para la Guagua Publica Carretera Mella:");
+        int pasajerosGuagua = Convert.ToInt32(Console.ReadLine());
+
+        // Crear instancias de los autobuses con la cantidad de pasajeros ingresada por el usuario
+        Autobus expreso27Febrero = new Autobus("Expreso 27 de Febrero", 25, 30);
+        Autobus omsaMegacentroVillaAgricola = new Autobus("OMSA Megacentro - Villa Agricola", 25, 20);
+        Autobus guaguaPublicaMella = new Autobus("Guagua Publica Carretera Mella", 25, 40);
+
+        // Vender pasajes en cada autobús con la cantidad de pasajeros ingresada por el usuario
+        expreso27Febrero.VenderPasaje(pasajerosExpreso);
+        omsaMegacentroVillaAgricola.VenderPasaje(pasajerosOmsa);
+        guaguaPublicaMella.VenderPasaje(pasajerosGuagua);
+
+        // Agregar pasajeros después de la venta inicial
+        Console.WriteLine("Ingrese la cantidad de pasajeros adicionales para el Expreso 27 de Febrero:");
+        int pasajerosAdicionalesExpreso = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Ingrese la cantidad de pasajeros adicionales para la OMSA Megacentro - Villa Agricola:");
+        int pasajerosAdicionalesOmsa = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Ingrese la cantidad de pasajeros adicionales para la Guagua Publica Carretera Mella:");
+        int pasajerosAdicionalesGuagua = Convert.ToInt32(Console.ReadLine());
+
+        expreso27Febrero.AgregarPasajeros(pasajerosAdicionalesExpreso);
+        omsaMegacentroVillaAgricola.AgregarPasajeros(pasajerosAdicionalesOmsa);
+        guaguaPublicaMella.AgregarPasajeros(pasajerosAdicionalesGuagua);
+
+        // Calcular ganancias después de 4 vueltas para cada autobús
+        int numVueltas = 4;
+        decimal gananciasExpreso = expreso27Febrero.CalcularGanancias(numVueltas);
+        decimal gananciasOmsa = omsaMegacentroVillaAgricola.CalcularGanancias(numVueltas);
+        decimal gananciasGuagua = guaguaPublicaMella.CalcularGanancias(numVueltas);
+
+        // Mostrar las ganancias totales de cada autobús y el precio por asiento
+        Console.WriteLine($"Ganancias Expreso 27 de Febrero: {gananciasExpreso}");
+        Console.WriteLine($"Precio por asiento Expreso 27 de Febrero: {expreso27Febrero.CalcularPrecioAsiento()}");
+        Console.WriteLine($"Ganancias OMSA Megacentro - Villa Agricola: {gananciasOmsa}");
+        Console.WriteLine($"Precio por asiento OMSA Megacentro - Villa Agricola: {omsaMegacentroVillaAgricola.CalcularPrecioAsiento()}");
+        Console.WriteLine($"Ganancias Guagua Publica Carretera Mella: {gananciasGuagua}");
+        Console.WriteLine($"Precio por asiento Guagua Publica Carretera Mella: {guaguaPublicaMella.CalcularPrecioAsiento()}");
+}
+}
